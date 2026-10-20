@@ -1,2 +1,2 @@
-def timer_opcodes(opcode):
+def timer_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     pass
