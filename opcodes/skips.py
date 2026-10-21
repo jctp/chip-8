@@ -8,7 +8,7 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         register_number = (opcode & 0x0F00) >> 8
         incoming_byte = opcode_lo_byte
         if self.v[register_number] == incoming_byte:
-            program_counter.inc(1) # Already inc'd one in main loop
+            program_counter.inc(2) # Already inc'd one in main loop
             self.log_opcode(
                 opcode,
                 "SE Vx, NN",
@@ -29,12 +29,20 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # SNE Vx, NN
     # Skip next instruction if Vx != NN
     elif (opcode & 0xF000) == 0x4000:
-        # TODO: Implement
+        
+        vx_register = (opcode & 0x0F00) >> 8
+        vx_contents = self.v[vx_register].contents
+
+        incoming_byte = opcode_lo_byte
+
+        if (vx_contents != incoming_byte):
+            self.program_counter.inc(2) # Counter already incremented in loop
+
         self.log_opcode(
             opcode,
             "SNE Vx, NN",
-            f"",
-            implemented = False
+            f"", # TODO: Logging
+            implemented = True
         )
         return 1
 
@@ -42,12 +50,21 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # SE Vx, Vy
     # Skip next instruction if Vx == Vy
     elif (opcode & 0xF000) == 0x5000:
-        # TODO: Implement
+
+        vx_register = (opcode & 0x0F00) >> 8
+        vy_register = (opcode & 0x00F0) >> 4
+
+        vx_contents = self.v[vx_register].contents
+        vy_contents = self.v[vy_register].contents
+
+        if (vx_contents == vy_contents):
+            self.program_counter.inc(2) # Counter already incremented in loop
+
         self.log_opcode(
             opcode,
             "SE Vx, Vy",
             f"",
-            implemented = False
+            implemented = True
         )
         return 1
 
@@ -55,12 +72,20 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # SNE Vx, Vy
     # Skip next instruction if Vx != Vy
     elif (opcode & 0xF000) == 0x9000:
-        # TODO: Implement
+        vx_register = (opcode & 0x0F00) >> 8
+        vy_register = (opcode & 0x00F0) >> 4
+
+        vx_contents = self.v[vx_register].contents
+        vy_contents = self.v[vy_register].contents
+
+        if (vx_contents != vy_contents):
+            self.program_counter.inc(2) # Counter already incremented in loop
+
         self.log_opcode(
             opcode,
             "SNE Vx, Vy",
             f"",
-            implemented = False
+            implemented = True
         )
         return 1
 

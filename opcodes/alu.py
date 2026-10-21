@@ -87,12 +87,12 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         result = (vx_contents + vy_contents) & 0xFF
 
-        self.V[vx_register].set(result)
+        self.v[vx_register].set(result)
 
         if result > 0xFF:
-            self.Vf.set(1)
+            self.v[0xF].set(1)
         else:
-            self.Vf.set(0)
+            self.v[0xF].set(0)
 
         self.log_opcode(
             opcode,
@@ -112,13 +112,13 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         vy_contents = self.v[vy_register].contents
 
         if vx_contents > vy_contents:
-            self.Vf.set(1)
+            self.v[0xF].set(1)
         else:
-            self.Vf.set(0)
+            self.v[0xF].set(0)
 
         result = (vx_contents - vy_contents) & 0xFF
 
-        self.V[vx_register].set(result)
+        self.v[vx_register].set(result)
 
         self.log_opcode(
             opcode,
@@ -140,9 +140,9 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         vx_lsb = (vx_contents & 0x01)
 
         if vx_lsb == 1:
-            self.Vf.set(1)
+            self.v[0xF].set(1)
         else:
-            self.Vf.set(0)
+            self.v[0xF].set(0)
 
         vx_div_2 = (vx_contents / 2)
 
@@ -158,32 +158,71 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # 8XY7
     # SUBN Vx, Vy
     elif (opcode & 0xF00F) == 0x8007:
-        # TODO: Implement
+        
+        vx_register = (opcode & 0x0F00) >> 8
+        vy_register = (opcode & 0x00F0) >> 4
+
+        vx_contents = self.v[vx_register].contents
+        vy_contents = self.v[vy_register].contents
+
+        vx_lsb = (vx_contents & 0x01)
+
+        if vy_contents > vx_contents:
+            self.v[0xF].set(1)
+        else:
+            self.v[0xF].set(0)
+
+        vx_mult_2 = (vx_contents * 2)
+
+        self.v[vx_register].set(vx_mult_2)
+
         self.log_opcode(
             opcode,
-            "SUBN",
-            f"",
-            implemented = False
+            "SUBN Vx, Vy",
+            f"", #TODO: Logging
+            implemented = True
         )
 
     # 8XYE
-    # SHL
+    # SHL Vx {, Vy}
     elif (opcode & 0xF00F) == 0x800E:
-        # TODO: Implement
+
+        vx_register = (opcode & 0x0F00) >> 8
+        vy_register = (opcode & 0x00F0) >> 4
+
+        vx_contents = self.v[vx_register].contents
+        vy_contents = self.v[vy_register].contents
+
+        vx_msb = (vx_contents & 0x80) >> 7
+
+        if vx_msb == 1:
+            self.v[0xF].set(1)
+        else:
+            self.v[0xF].set(0)
+
+        vx_mult_2 = (vx_contents * 2)
+
+        self.v[vx_register].set(vx_mult_2)
+
         self.log_opcode(
             opcode,
-            "SHL",
-            f"",
-            implemented = False
+            "SHL {Vx, Vy}",
+            f"", #TODO: Logging
+            implemented = True
         )
 
     # FX1E
     # ADD I, Vx
     elif (opcode & 0xF0FF) == 0xF01E:
-        # TODO: Implement
+
+        vx_register = (opcode & 0x0F00) >> 8
+        vx_contents = self.v[vx_register].contents
+
+        self.index_register.set(self.index_register.contents + vx_contents)
+
         self.log_opcode(
             opcode,
             "ADD I, Vx",
-            f"",
-            implemented = False
+            f"", #TODO: Logging
+            implemented = True
         )

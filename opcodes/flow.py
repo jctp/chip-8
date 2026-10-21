@@ -1,22 +1,43 @@
 def flow_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     
+    # 2NNN
+    # CALL NNN
+    # Call subroutine at NNN
+    if (opcode & 0xF000) == 0x2000:
+
+        subroutine_address = (opcode & 0x0FFF)
+
+        _old_stack_counter = self.program_counter.get()
+
+        self.stack.append(self.program_counter.get() + 2)
+
+        self.program_counter.set(subroutine_address) 
+        self.program_counter.dec(2) # Will be incremented in same cycle by caller
+
+        self.log_opcode(
+            opcode,
+            "CALL NNN",
+            f"Added 1 to stack pointer, jumped from {_old_stack_counter:04X} to {self.program_counter.get():04X}",
+            implemented = True
+        )
+        return 1
+
+
     # 00EE
     # RET
     # Return from a subroutine
-    if (opcode & 0xFFFF) == 0x00EE:
+    elif (opcode & 0xFFFF) == 0x00EE:
 
         _old_stack_counter = self.program_counter.get()
 
         self.program_counter.set(self.stack.pop())
-        self.program_counter.dec() # Will be incremented in same cycle by caller
-
-        self.stack_pointer.dec()
+        self.program_counter.dec(2) # Will be incremented in same cycle by caller
 
         self.log_opcode(
             opcode,
             "RET",
             f"Subtracted 1 from stack pointer, jumped from {_old_stack_counter:04X} to {self.program_counter.get():04X}",
-            implemented = False
+            implemented = True
         )
         return 1
 
@@ -27,34 +48,12 @@ def flow_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         address = (opcode & 0x0FFF)
         self.program_counter.set(address)
-        
+        self.program_counter.dec(2) # Will be incremented in same cycle by caller
+
         self.log_opcode(
             opcode,
             "JP NNN",
             f"Set program counter to {address:04X}",
-            implemented = True
-        )
-        return 1
-
-    # 2NNN
-    # CALL NNN
-    # Call subroutine at NNN
-    elif (opcode & 0xF000) == 0x2000:
-
-        subroutine_address = (opcode & 0x0FFF)
-
-        _old_stack_counter = self.program_counter.get()
-
-        self.stack.append(self.program_counter.get())
-        self.stack_pointer.inc()
-
-        self.program_counter.set(subroutine_address) 
-        self.program_counter.dec() # Will be incremented in same cycle by caller
-
-        self.log_opcode(
-            opcode,
-            "CALL NNN",
-            f"Added 1 to stack pointer, jumped from {_old_stack_counter:04X} to {self.program_counter.get():04X}",
             implemented = True
         )
         return 1
