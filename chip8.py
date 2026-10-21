@@ -71,6 +71,13 @@ class Chip8Cpu:
         # Decade counter for ticks
         self.ticks = 10
 
+        # Sound support
+        pygame.mixer.init()
+        self.beep = pygame.mixer.Sound("tone.wav")
+        self.beeping = False
+
+        self.beep.play()
+
     def log_opcode(self, opcode, mnemonic, extra=None, implemented=False):
 
         if implemented == False:
@@ -92,7 +99,15 @@ class Chip8Cpu:
             self.delay_register.dec()
 
         if self.sound_register.get() > 0:
+            if not self.beeping:
+                self.beep.play(-1)
+                self.beeping = True
+
             self.sound_register.dec()
+
+        elif self.beeping:
+            self.beep.stop()
+            self.beeping = False
 
     def cycle(self):
         # Input handler
@@ -120,8 +135,7 @@ class Chip8Cpu:
         wait_time = 1 / self.cpu_hz
         counter_delay = wait_time * 10
 
-        if self.ticks < 0:
-            self.ticks = self.ticks - 1
+        self.ticks -= 1
 
         if self.ticks == 0:
             self.timer_tick()

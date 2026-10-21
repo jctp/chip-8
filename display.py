@@ -87,7 +87,7 @@ class Chip8Display:
         old_pixel = self.pixels[index]
         self.pixels[index] ^= 1
 
-        collision = old_pixel == 1 and self.pixels == 0
+        collision = old_pixel == 1 and self.pixels[index] == 0
 
         return collision
 
