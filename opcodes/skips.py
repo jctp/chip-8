@@ -7,8 +7,8 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     if (opcode & 0xF000) == 0x3000:
         register_number = (opcode & 0x0F00) >> 8
         incoming_byte = opcode_lo_byte
-        if self.v[register_number] == incoming_byte:
-            program_counter.inc(2) # Already inc'd one in main loop
+        if self.v[register_number].contents == incoming_byte:
+            self.program_counter.inc(2) # Already inc'd one in main loop
             self.log_opcode(
                 opcode,
                 "SE Vx, NN",
