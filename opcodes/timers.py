@@ -5,12 +5,7 @@ def timer_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # Set Vx = Delay Timer
     if (opcode & 0xF0FF) == 0xF007:
         # TODO: Implement
-        self.log_opcode(
-            opcode,
-            "LD Vx, DT"
-            f"",
-            implemented = False
-        )
+        self.log_opcode(opcode, f"LD Vx, DT", implemented=False)
         return 1
 
     # FX15
@@ -18,12 +13,7 @@ def timer_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # Set Delay Timer = Vx
     if (opcode & 0xF0FF) == 0xF015:
         # TODO: Implement
-        self.log_opcode(
-            opcode,
-            "LD DT, Vx"
-            f"",
-            implemented = False
-        )
+        self.log_opcode(opcode, f"LD DT, Vx", implemented=False)
         return 1
 
     # FX18
@@ -31,10 +21,5 @@ def timer_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # Set Sount Timer = Vx
     if (opcode & 0xF0FF) == 0xF018:
         # TODO: Implement
-        self.log_opcode(
-            opcode,
-            "LD ST, Vx"
-            f"",
-            implemented = False
-        )
+        self.log_opcode(opcode, f"LD ST, Vx", implemented=False)
         return 1

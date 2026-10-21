@@ -1,6 +1,5 @@
 def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
-
     # 3XNN
     # SE Vx, NN
     # Skip next instruction if Vx == NN
@@ -8,19 +7,19 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         register_number = (opcode & 0x0F00) >> 8
         incoming_byte = opcode_lo_byte
         if self.v[register_number].contents == incoming_byte:
-            self.program_counter.inc(2) # Already inc'd one in main loop
+            self.program_counter.inc(2)  # Already inc'd one in main loop
             self.log_opcode(
                 opcode,
                 "SE Vx, NN",
                 f"Value in V{register_number} ({self.v[register_number].contents:02X}) = {incoming_byte:02X}; skipping next ins.",
-                implemented = True
+                implemented=True,
             )
         else:
             self.log_opcode(
                 opcode,
                 "SE Vx, NN",
                 f"Value in V{register_number} ({self.v[register_number].contents:02X}) != {incoming_byte:02X}; continuing",
-                implemented = True
+                implemented=True,
             )
 
         return 1
@@ -29,20 +28,19 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # SNE Vx, NN
     # Skip next instruction if Vx != NN
     elif (opcode & 0xF000) == 0x4000:
-        
         vx_register = (opcode & 0x0F00) >> 8
         vx_contents = self.v[vx_register].contents
 
         incoming_byte = opcode_lo_byte
 
-        if (vx_contents != incoming_byte):
-            self.program_counter.inc(2) # Counter already incremented in loop
+        if vx_contents != incoming_byte:
+            self.program_counter.inc(2)  # Counter already incremented in loop
 
         self.log_opcode(
             opcode,
             "SNE Vx, NN",
-            f"", # TODO: Logging
-            implemented = True
+            f"",  # TODO: Logging
+            implemented=True,
         )
         return 1
 
@@ -50,22 +48,16 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # SE Vx, Vy
     # Skip next instruction if Vx == Vy
     elif (opcode & 0xF000) == 0x5000:
-
         vx_register = (opcode & 0x0F00) >> 8
         vy_register = (opcode & 0x00F0) >> 4
 
         vx_contents = self.v[vx_register].contents
         vy_contents = self.v[vy_register].contents
 
-        if (vx_contents == vy_contents):
-            self.program_counter.inc(2) # Counter already incremented in loop
+        if vx_contents == vy_contents:
+            self.program_counter.inc(2)  # Counter already incremented in loop
 
-        self.log_opcode(
-            opcode,
-            "SE Vx, Vy",
-            f"",
-            implemented = True
-        )
+        self.log_opcode(opcode, "SE Vx, Vy", f"", implemented=True)
         return 1
 
     # 9XY0
@@ -78,15 +70,10 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         vx_contents = self.v[vx_register].contents
         vy_contents = self.v[vy_register].contents
 
-        if (vx_contents != vy_contents):
-            self.program_counter.inc(2) # Counter already incremented in loop
+        if vx_contents != vy_contents:
+            self.program_counter.inc(2)  # Counter already incremented in loop
 
-        self.log_opcode(
-            opcode,
-            "SNE Vx, Vy",
-            f"",
-            implemented = True
-        )
+        self.log_opcode(opcode, "SNE Vx, Vy", f"", implemented=True)
         return 1
 
     # EX9E
@@ -94,12 +81,7 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # Skip next instruction if key with value of Vx pressed
     elif (opcode & 0xF0FF) == 0xE09E:
         # TODO: Implement
-        self.log_opcode(
-            opcode,
-            "SKP Vx",
-            f"",
-            implemented = False
-        )
+        self.log_opcode(opcode, "SKP Vx", f"", implemented=False)
         return 1
 
     # EXA1
@@ -107,10 +89,5 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # Skip next instruction if key with value of Vx pressed
     elif (opcode & 0xF0FF) == 0xE0A1:
         # TODO: Implement
-        self.log_opcode(
-            opcode,
-            "SKNP Vx",
-            f"",
-            implemented = False
-        )
+        self.log_opcode(opcode, "SKNP Vx", f"", implemented=False)
         return 1

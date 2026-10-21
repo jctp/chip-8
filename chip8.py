@@ -1,6 +1,7 @@
 from opcodes._dispatcher import dispatcher_cycle
 import time
 
+
 class Chip8Cpu:
     class EightBitRegister:
         def __init__(self):
@@ -46,17 +47,17 @@ class Chip8Cpu:
         self.cpu_hz = cpu_hz
         self.logger = debug_logger
 
-        self.stack = [] # len() will get the top of the stack
+        self.stack = []  # len() will get the top of the stack
 
         # Set up general purpose registers
         self.v = [self.EightBitRegister() for _ in range(16)]
 
         self.delay_register = self.EightBitRegister()
         self.sound_register = self.EightBitRegister()
-        
+
         self.delay_timer = self.Timer(self.delay_register)
         self.sound_timer = self.Timer(self.sound_register)
-        
+
         self.program_counter = self.SixteenBitRegister()
         self.program_counter.set(0x200)
 
@@ -66,26 +67,26 @@ class Chip8Cpu:
         for i, byte in enumerate(self.rom.contents):
             self.memory.contents[i + 0x200] = byte
 
-    def log_opcode(
-        self,
-        opcode,
-        mnemonic,
-        extra=None,
-        implemented=False
-    ):
+    def log_opcode(self, opcode, mnemonic, extra=None, implemented=False):
 
         if implemented == False:
-            raise Exception(f"Opcode not implemented: {opcode:04X}, mnemonic: {mnemonic}")
+            raise Exception(
+                f"Opcode not implemented: {opcode:04X}, mnemonic: {mnemonic}"
+            )
 
         if extra != None:
-            self.logger.debug(f" {self.program_counter.contents:04X} : {opcode:04X} : {mnemonic} : {extra}")
+            self.logger.debug(
+                f" {self.program_counter.contents:04X} : {opcode:04X} : {mnemonic} : {extra}"
+            )
         else:
-            self.logger.debug(f" {self.program_counter.contents:04X} : {opcode:04X} : {mnemonic}")
+            self.logger.debug(
+                f" {self.program_counter.contents:04X} : {opcode:04X} : {mnemonic}"
+            )
 
     def cycle(self):
         current_pc = self.program_counter.contents
-        opcode = (
-            (self.memory.contents[current_pc] << 8) | (self.memory.contents[current_pc + 1])
+        opcode = (self.memory.contents[current_pc] << 8) | (
+            self.memory.contents[current_pc + 1]
         )
         opcode_hi_byte = self.memory.contents[current_pc]
         opcode_lo_byte = self.memory.contents[current_pc + 1]
@@ -98,6 +99,5 @@ class Chip8Cpu:
 
         self.display.redraw()
 
-        #time.sleep(0.025 * cycles_to_wait)
+        # time.sleep(0.025 * cycles_to_wait)
         self.program_counter.inc(2)
-

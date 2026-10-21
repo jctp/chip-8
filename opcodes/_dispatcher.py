@@ -8,6 +8,7 @@ from opcodes.rng import rng_opcodes
 from opcodes.skips import skips_opcodes
 from opcodes.timers import timer_opcodes
 
+
 def dispatcher_cycle(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # Brute force it for now
 
@@ -22,7 +23,7 @@ def dispatcher_cycle(self, opcode, opcode_hi_byte, opcode_lo_byte):
     cycles = rng_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
     cycles = skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
     cycles = timer_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
-    
+
     if cycles == 0:
         raise Exception(f"Opcode not implemented or stubbed: {opcode:04X}")
 
