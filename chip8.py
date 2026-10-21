@@ -1,5 +1,6 @@
 from opcodes._dispatcher import dispatcher_cycle
 import time
+import pygame
 
 
 class Chip8Cpu:
@@ -67,6 +68,9 @@ class Chip8Cpu:
         for i, byte in enumerate(self.rom.contents):
             self.memory.contents[i + 0x200] = byte
 
+        # Decade counter for ticks
+        self.ticks = 10
+
     def log_opcode(self, opcode, mnemonic, extra=None, implemented=False):
 
         if implemented == False:
@@ -83,7 +87,21 @@ class Chip8Cpu:
                 f" {self.program_counter.contents:04X} : {opcode:04X} : {mnemonic}"
             )
 
+    def timer_tick(self):
+        if self.delay_register.get() > 0:
+            self.delay_register.dec()
+
+        if self.sound_register.get() > 0:
+            self.sound_register.dec()
+
     def cycle(self):
+        # Input handler
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                self.io.set_key(event.key, True)
+            if event.type == pygame.KEYUP:
+                self.io.set_key(event.key, False)
+
         current_pc = self.program_counter.contents
         opcode = (self.memory.contents[current_pc] << 8) | (
             self.memory.contents[current_pc + 1]
@@ -99,5 +117,15 @@ class Chip8Cpu:
 
         self.display.redraw()
 
-        # time.sleep(0.025 * cycles_to_wait)
+        wait_time = 1 / self.cpu_hz
+        counter_delay = wait_time * 10
+
+        if self.ticks < 0:
+            self.ticks = self.ticks - 1
+
+        if self.ticks == 0:
+            self.timer_tick()
+            self.ticks = 10
+
+        time.sleep(wait_time * cycles_to_wait)
         self.program_counter.inc(2)

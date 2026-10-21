@@ -75,19 +75,3 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         self.log_opcode(opcode, "SNE Vx, Vy", f"", implemented=True)
         return 1
-
-    # EX9E
-    # SKP Vx
-    # Skip next instruction if key with value of Vx pressed
-    elif (opcode & 0xF0FF) == 0xE09E:
-        # TODO: Implement
-        self.log_opcode(opcode, "SKP Vx", f"", implemented=False)
-        return 1
-
-    # EXA1
-    # SKNP Vx
-    # Skip next instruction if key with value of Vx pressed
-    elif (opcode & 0xF0FF) == 0xE0A1:
-        # TODO: Implement
-        self.log_opcode(opcode, "SKNP Vx", f"", implemented=False)
-        return 1

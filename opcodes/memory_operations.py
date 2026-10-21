@@ -13,8 +13,14 @@ def mops_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # LD F, Vx
     # Set I to location of sprite for digit in Vx
     elif (opcode & 0xF0FF) == 0xF029:
-        # TODO: Impleement
-        self.log_opcode(opcode, "LD F, Vx", f"", implemented=False)
+        FONT_BASE = 0x00
+        FONT_HEIGHT = 5
+
+        vx_number = (opcode & 0x0F00) >> 8
+        sprite_id = self.v[vx_number].get()
+        sprite_address = FONT_BASE + (sprite_id * FONT_HEIGHT)
+        self.index_register.set(sprite_address)
+        self.log_opcode(opcode, "LD F, Vx", f"", implemented=True)  # TODO: Logging
         return 1
 
     # FX33
