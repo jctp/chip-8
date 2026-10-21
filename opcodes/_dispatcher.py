@@ -10,13 +10,20 @@ from opcodes.timers import timer_opcodes
 
 def dispatcher_cycle(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # Brute force it for now
-    alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
-    display_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
-    flow_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
-    input_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
-    mops_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
-    register_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
-    rng_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
-    skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
-    timer_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
+
+    cycles = 0
+
+    cycles = alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
+    cycles = display_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
+    cycles = flow_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
+    cycles = input_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
+    cycles = mops_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
+    cycles = register_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
+    cycles = rng_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
+    cycles = skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
+    cycles = timer_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte)
+    
+    if cycles == 0:
+        raise Exception(f"Opcode not implemented or stubbed: {opcode:04X}")
+
     return

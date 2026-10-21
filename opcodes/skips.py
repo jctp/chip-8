@@ -5,13 +5,24 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # SE Vx, NN
     # Skip next instruction if Vx == NN
     if (opcode & 0xF000) == 0x3000:
-        # TODO: Implement
-        self.log_opcode(
-            opcode,
-            "SE Vx, NN",
-            f"",
-            implemented = False
-        )
+        register_number = (opcode & 0x0F00) >> 8
+        incoming_byte = opcode_lo_byte
+        if self.v[register_number] == incoming_byte:
+            program_counter.inc(1) # Already inc'd one in main loop
+            self.log_opcode(
+                opcode,
+                "SE Vx, NN",
+                f"Value in V{register_number} ({self.v[register_number].contents:02X}) = {incoming_byte:02X}; skipping next ins.",
+                implemented = True
+            )
+        else:
+            self.log_opcode(
+                opcode,
+                "SE Vx, NN",
+                f"Value in V{register_number} ({self.v[register_number].contents:02X}) != {incoming_byte:02X}; continuing",
+                implemented = True
+            )
+
         return 1
 
     # 4XNN

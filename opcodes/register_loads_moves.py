@@ -18,11 +18,15 @@ def register_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # LD Vx, Vy
     # Set Vx = Vy
     elif (opcode & 0xF00F) == 0x8000:
-        # TODO: Implement
+        x = (opcode & 0x0F00) >> 8
+        y = (opcode & 0x00F0) >> 4
+        self.v[x].set(
+            self.v[y].contents
+        )
         self.log_opcode(
             opcode,
             "LD Vx, Vy",
-            f"",
-            implemented = False
+            f"Set v{x} to value in v{y} ({self.v[x].contents:02X})",
+            implemented = True
         )
         return 1

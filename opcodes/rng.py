@@ -7,7 +7,7 @@ def rng_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         # TODO: Implement
         self.log_opcode(
             opcode,
-            "RND Vx, NNN,
+            "RND Vx, NNN",
             f"",
             implemented = False
         )

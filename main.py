@@ -6,7 +6,7 @@ from rom import Chip8Rom
 from display import Chip8Display
 
 system_rom = Chip8Rom(
-    file_path="roms/2-ibm-logo.ch8",
+    file_path="roms/3-corax+.ch8",
     debug_logger=logger
 )
 system_display = Chip8Display()

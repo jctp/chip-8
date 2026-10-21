@@ -1,7 +1,7 @@
 class Chip8Memory:
     def __init__(self):
 
-        self.contents = bytearray(0xFFF)
+        self.contents = bytearray(4096)
 
         characters = [
             0xF0,

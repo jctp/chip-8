@@ -221,3 +221,4 @@ __marimo__/
 
 # ROMs
 *.ch8
+.DS_Store

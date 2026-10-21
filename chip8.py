@@ -47,7 +47,6 @@ class Chip8Cpu:
         self.logger = debug_logger
 
         self.stack = []
-        self.logger.debug("Set up empty stack.")
 
         # Set up general purpose registers
         self.v = [self.EightBitRegister() for _ in range(16)]
@@ -71,18 +70,18 @@ class Chip8Cpu:
     def log_opcode(
         self,
         opcode,
-        mnemomic,
+        mnemonic,
         extra=None,
         implemented=False
     ):
 
-        #if implemented == False:
-            #raise Exception(f"Opcode not implemented: {opcode:04X}, mnemonic: {mnemonic}")
+        if implemented == False:
+            raise Exception(f"Opcode not implemented: {opcode:04X}, mnemonic: {mnemonic}")
 
         if extra != None:
-            self.logger.debug(f"{opcode}: {mnemomic}: {extra}")
+            self.logger.debug(f" {self.program_counter.contents:04X} : {opcode:04X} : {mnemonic} : {extra}")
         else:
-            self.logger.debug(f"{opcode}: {mnemomic}")
+            self.logger.debug(f" {self.program_counter.contents:04X} : {opcode:04X} : {mnemonic}")
 
     def cycle(self):
         current_pc = self.program_counter.contents
@@ -92,8 +91,6 @@ class Chip8Cpu:
         opcode_hi_byte = self.memory.contents[current_pc]
         opcode_lo_byte = self.memory.contents[current_pc + 1]
 
-        self.logger.debug(f"Opcode:{opcode:04X} {opcode_hi_byte:02X} {opcode_lo_byte:02X}")
-
         cycles_to_wait = dispatcher_cycle(self, opcode, opcode_hi_byte, opcode_lo_byte)
 
         # Safety
@@ -102,6 +99,6 @@ class Chip8Cpu:
 
         self.display.redraw()
 
-        time.sleep(0.20 * cycles_to_wait)
+        time.sleep(0.05 * cycles_to_wait)
         self.program_counter.inc(2)
 
