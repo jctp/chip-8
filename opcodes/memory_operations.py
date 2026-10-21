@@ -57,12 +57,19 @@ def mops_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # LD [I], Vx
     # Store registers V0 through Vx in mem. starting at I
     elif (opcode & 0xF0FF) == 0xF055:
-        # TODO: Impleement
+        
+        vx_number = (opcode & 0x0F00) >> 8
+
+        for i in range(vx_number + 1):
+            self.memory.contents[
+                self.index_register.get() + i
+            ] = self.v[i].get()
+
         self.log_opcode(
             opcode,
             "LD [I], Vx",
-            f"",
-            implemented = False
+            f"", #TODO: Logging
+            implemented = True
         )
         return 1
 
@@ -70,12 +77,21 @@ def mops_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # LD Vx, [I]
     # Load reg. V0 through Vx from mem. starting at I
     elif (opcode & 0xF0FF) == 0xF065:
-        # TODO: Impleement
+
+        vx_number = (opcode & 0x0F00) >> 8
+
+        for i in range(vx_number + 1):
+            self.v[i].set(
+                self.memory.contents[
+                    self.index_register.get() + 1
+                ]
+            )
+
         self.log_opcode(
             opcode,
             "LD [I], Vx",
-            f"",
-            implemented = False
+            f"", # TODO: Logging
+            implemented = True
         )
         return 1
 

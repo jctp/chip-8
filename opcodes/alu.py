@@ -144,7 +144,7 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         else:
             self.v[0xF].set(0)
 
-        vx_div_2 = (vx_contents / 2)
+        vx_div_2 = int(vx_contents / 2)
 
         self.v[vx_register].set(vx_div_2)
 
