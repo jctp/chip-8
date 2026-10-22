@@ -5,10 +5,13 @@ class Chip8Display:
     WINDOW_HEIGHT = 32
     WINDOW_SCALE = 15
 
-    def __init__(self):
+    def __init__(self, background_colour, foreground_colour):
         pygame.init()
         pygame.display.set_caption("CHIPster")
         self.pixel_map = bytearray(64 * 32)
+
+        self.background_colour = background_colour
+        self.foreground_colour = foreground_colour
 
         self.screen = pygame.display.set_mode(
             (
@@ -26,7 +29,7 @@ class Chip8Display:
         )
 
     def redraw(self):
-        self.screen.fill("#827717")
+        self.screen.fill(self.background_colour)
         self.pixels.fill((0, 0, 0, 0))
 
         # Pixels
@@ -35,7 +38,7 @@ class Chip8Display:
                 if self.pixel_map[y * self.WINDOW_WIDTH + x]:
                     pygame.draw.rect(
                         self.pixels,
-                        ("#CDDC39"),
+                        (self.foreground_colour),
                         (
                             x * self.WINDOW_SCALE,
                             y * self.WINDOW_SCALE,

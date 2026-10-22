@@ -7,7 +7,10 @@ from display import Chip8Display
 from chip8_io import Chip8IO
 
 system_rom = Chip8Rom(file_path="roms/superpong.ch8", debug_logger=logger)
-system_display = Chip8Display()
+system_display = Chip8Display(
+    background_colour = "blue",
+    foreground_colour = "cyan"
+)
 system_memory = Chip8Memory()
 system_io = Chip8IO()
 
