@@ -11,5 +11,6 @@ def rng_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         nn = opcode & 0x00FF
         output = random.randint(0, 255) & nn
         self.v[vx_number].set(output)
-        self.log_opcode(opcode, "RND Vx, NNN", f"", implemented=True)  # TODO: Logging
+        if self.logging_enabled:
+            self.log_opcode(opcode, "RND Vx, NNN", f"", implemented=True)  # TODO: Logging
         return 1

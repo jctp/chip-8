@@ -6,7 +6,8 @@ def mops_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     if (opcode & 0xF000) == 0xA000:
         address = opcode & 0x0FFF
         self.index_register.set(address)
-        self.log_opcode(opcode, "LD I, addr", f"I = {address:03X}", implemented=True)
+        if self.logging_enabled:
+            self.log_opcode(opcode, "LD I, addr", f"I = {address:03X}", implemented=True)
         return 1
 
     # FX29
@@ -20,7 +21,8 @@ def mops_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         sprite_id = self.v[vx_number].get()
         sprite_address = FONT_BASE + (sprite_id * FONT_HEIGHT)
         self.index_register.set(sprite_address)
-        self.log_opcode(opcode, "LD F, Vx", f"", implemented=True)  # TODO: Logging
+        if self.logging_enabled:
+            self.log_opcode(opcode, "LD F, Vx", f"", implemented=True)  # TODO: Logging
         return 1
 
     # FX33
@@ -39,12 +41,13 @@ def mops_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         self.memory.contents[self.index_register.get() + 1] = tens
         self.memory.contents[self.index_register.get() + 2] = ones
 
-        self.log_opcode(
-            opcode,
-            "LD B, Vx",
-            f"",  # TODO: Logging
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "LD B, Vx",
+                f"",  # TODO: Logging
+                implemented=True,
+            )
         return 1
 
     # FX55
@@ -56,12 +59,13 @@ def mops_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         for i in range(vx_number + 1):
             self.memory.contents[self.index_register.get() + i] = self.v[i].get()
 
-        self.log_opcode(
-            opcode,
-            "LD [I], Vx",
-            f"",  # TODO: Logging
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "LD [I], Vx",
+                f"",  # TODO: Logging
+                implemented=True,
+            )
         return 1
 
     # FX65
@@ -73,10 +77,11 @@ def mops_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         for i in range(vx_number + 1):
             self.v[i].set(self.memory.contents[self.index_register.get() + i])
 
-        self.log_opcode(
-            opcode,
-            "LD [I], Vx",
-            f"",  # TODO: Logging
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "LD [I], Vx",
+                f"",  # TODO: Logging
+                implemented=True,
+            )
         return 1

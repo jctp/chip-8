@@ -9,12 +9,13 @@ def input_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         for key, pressed in enumerate(self.io.keys):
             if pressed:
                 self.v[vx_number].set(key)
-                self.log_opcode(
-                    opcode,
-                    "LD Vx, K",
-                    f"Stored key {key:X} in V{vx_number:X}",
-                    implemented=True,
-                )
+                if self.logging_enabled:
+                    self.log_opcode(
+                        opcode,
+                        "LD Vx, K",
+                        f"Stored key {key:X} in V{vx_number:X}",
+                        implemented=True,
+                    )
                 return 1
 
         self.program_counter.dec(2)
@@ -28,20 +29,22 @@ def input_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         if self.io.keys[self.v[vx_number].get()]:
             self.program_counter.inc(2)
+            if self.logging_enabled:
+                self.log_opcode(
+                    opcode,
+                    "SKP Vx",
+                    f"Key {vx_number:X} pressed, skipping",
+                    implemented=True,
+                )
+            return 1
+
+        if self.logging_enabled:
             self.log_opcode(
                 opcode,
                 "SKP Vx",
-                f"Key {vx_number:X} pressed, skipping",
+                f"Key {vx_number:X} not pressed, not skipping",
                 implemented=True,
             )
-            return 1
-
-        self.log_opcode(
-            opcode,
-            "SKP Vx",
-            f"Key {vx_number:X} not pressed, not skipping",
-            implemented=True,
-        )
         return 1
 
     # EXA1
@@ -52,18 +55,19 @@ def input_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         if not self.io.keys[self.v[vx_number].get()]:
             self.program_counter.inc(2)
+            if self.logging_enabled:
+                self.log_opcode(
+                    opcode,
+                    "SKNP Vx",
+                    f"Key {vx_number:X} not pressed, skipping",
+                    implemented=True,
+                )
+            return 1
+        if self.logging_enabled:
             self.log_opcode(
                 opcode,
                 "SKNP Vx",
-                f"Key {vx_number:X} not pressed, skipping",
+                f"Key {vx_number:X} pressed, not skipping",
                 implemented=True,
             )
-            return 1
-
-        self.log_opcode(
-            opcode,
-            "SKNP Vx",
-            f"Key {vx_number:X} pressed, not skipping",
-            implemented=True,
-        )
         return 1

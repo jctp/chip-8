@@ -40,13 +40,14 @@ class Chip8Cpu:
         def __init__(self, timer_register):
             self.timer_register = timer_register
 
-    def __init__(self, memory, display, io, rom, cpu_hz, debug_logger):
+    def __init__(self, memory, display, io, rom, cpu_hz, debug_logger, logging_enabled = False):
         self.memory = memory
         self.display = display
         self.io = io
         self.rom = rom
         self.cpu_hz = cpu_hz
         self.logger = debug_logger
+        self.logging_enabled = logging_enabled
 
         self.stack = []  # len() will get the top of the stack
 

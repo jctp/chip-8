@@ -5,7 +5,8 @@ def display_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     # Clear the display
     if opcode == 0x00E0:
         self.display.clear()
-        self.log_opcode(opcode, "CLS", f"SCREEN CLEAR", implemented=True)
+        if self.logging_enabled:
+            self.log_opcode(opcode, "CLS", f"SCREEN CLEAR", implemented=True)
         return 1
 
     # DXYN

@@ -6,7 +6,8 @@ def timer_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     if (opcode & 0xF0FF) == 0xF007:
         vx_number = (opcode & 0x0F00) >> 8
         self.v[vx_number].set(self.delay_timer.timer_register.contents)
-        self.log_opcode(opcode, f"LD Vx, DT", f"", implemented=True)  # TODO: Logging
+        if self.logging_enabled:
+            self.log_opcode(opcode, f"LD Vx, DT", f"", implemented=True)  # TODO: Logging
         return 1
 
     # FX15
@@ -15,7 +16,8 @@ def timer_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     if (opcode & 0xF0FF) == 0xF015:
         vx_number = (opcode & 0x0F00) >> 8
         self.delay_timer.timer_register.set(self.v[vx_number].contents)
-        self.log_opcode(opcode, f"LD DT, Vx", f"", implemented=True)  # TODO: Logging
+        if self.logging_enabled:
+            self.log_opcode(opcode, f"LD DT, Vx", f"", implemented=True)  # TODO: Logging
         return 1
 
     # FX18
@@ -24,5 +26,6 @@ def timer_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
     if (opcode & 0xF0FF) == 0xF018:
         vx_number = (opcode & 0x0F00) >> 8
         self.sound_timer.timer_register.set(self.v[vx_number].contents)
-        self.log_opcode(opcode, f"LD ST, Vx", f"", implemented=True)  # TODO: Logging
+        if self.logging_enabled:
+            self.log_opcode(opcode, f"LD ST, Vx", f"", implemented=True)  # TODO: Logging
         return 1

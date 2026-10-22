@@ -8,19 +8,21 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         incoming_byte = opcode_lo_byte
         if self.v[register_number].contents == incoming_byte:
             self.program_counter.inc(2)  # Already inc'd one in main loop
-            self.log_opcode(
-                opcode,
-                "SE Vx, NN",
-                f"Value in V{register_number} ({self.v[register_number].contents:02X}) = {incoming_byte:02X}; skipping next ins.",
-                implemented=True,
-            )
+            if self.logging_enabled:
+                self.log_opcode(
+                    opcode,
+                    "SE Vx, NN",
+                    f"Value in V{register_number} ({self.v[register_number].contents:02X}) = {incoming_byte:02X}; skipping next ins.",
+                    implemented=True,
+                )
         else:
-            self.log_opcode(
-                opcode,
-                "SE Vx, NN",
-                f"Value in V{register_number} ({self.v[register_number].contents:02X}) != {incoming_byte:02X}; continuing",
-                implemented=True,
-            )
+            if self.logging_enabled:
+                self.log_opcode(
+                    opcode,
+                    "SE Vx, NN",
+                    f"Value in V{register_number} ({self.v[register_number].contents:02X}) != {incoming_byte:02X}; continuing",
+                    implemented=True,
+                )
 
         return 1
 
@@ -36,12 +38,13 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         if vx_contents != incoming_byte:
             self.program_counter.inc(2)  # Counter already incremented in loop
 
-        self.log_opcode(
-            opcode,
-            "SNE Vx, NN",
-            f"",  # TODO: Logging
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "SNE Vx, NN",
+                f"",  # TODO: Logging
+                implemented=True,
+            )
         return 1
 
     # 5XY0
@@ -57,7 +60,8 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         if vx_contents == vy_contents:
             self.program_counter.inc(2)  # Counter already incremented in loop
 
-        self.log_opcode(opcode, "SE Vx, Vy", f"", implemented=True)
+        if self.logging_enabled:
+            self.log_opcode(opcode, "SE Vx, Vy", f"", implemented=True)
         return 1
 
     # 9XY0
@@ -72,6 +76,7 @@ def skips_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         if vx_contents != vy_contents:
             self.program_counter.inc(2)  # Counter already incremented in loop
-
-        self.log_opcode(opcode, "SNE Vx, Vy", f"", implemented=True)
+        
+        if self.logging_enabled:
+            self.log_opcode(opcode, "SNE Vx, Vy", f"", implemented=True)
         return 1

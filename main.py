@@ -16,8 +16,9 @@ system_cpu = Chip8Cpu(
     display=system_display,
     io=system_io,
     rom=system_rom,
-    cpu_hz=6000,
+    cpu_hz=10000,
     debug_logger=logger,
+    logging_enabled=False
 )
 
 while True:

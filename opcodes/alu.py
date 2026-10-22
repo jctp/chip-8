@@ -26,12 +26,13 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         self.v[vx_register].set(vx_contents | vy_contents)
 
-        self.log_opcode(
-            opcode,
-            "OR Vx, Vy",
-            f"(V{vx_register}) {vx_contents:02X} OR (V{vy_register}) {vy_contents:02X}",
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "OR Vx, Vy",
+                f"(V{vx_register}) {vx_contents:02X} OR (V{vy_register}) {vy_contents:02X}",
+                implemented=True,
+            )
 
     # 8XY2
     # AND Vx, Vy
@@ -45,12 +46,13 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         self.v[vx_register].set(vx_contents & vy_contents)
 
-        self.log_opcode(
-            opcode,
-            "AND Vx, Vy",
-            f"(V{vx_register}) {vx_contents:02X} AND (V{vy_register}) {vy_contents:02X}",
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "AND Vx, Vy",
+                f"(V{vx_register}) {vx_contents:02X} AND (V{vy_register}) {vy_contents:02X}",
+                implemented=True,
+            )
 
     # 8XY3
     # XOR Vx, Vy
@@ -63,12 +65,13 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         self.v[vx_register].set(vx_contents ^ vy_contents)
 
-        self.log_opcode(
-            opcode,
-            "XOR Vx, Vy",
-            f"(V{vx_register}) {vx_contents:02X} XOR (V{vy_register}) {vy_contents:02X}",
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "XOR Vx, Vy",
+                f"(V{vx_register}) {vx_contents:02X} XOR (V{vy_register}) {vy_contents:02X}",
+                implemented=True,
+            )
 
     # 8XY4
     # ADD Vx, Vy
@@ -88,12 +91,13 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         else:
             self.v[0xF].set(0)
 
-        self.log_opcode(
-            opcode,
-            "ADD Vx, Vy",
-            f"(V{vx_register}) {vx_contents:02X} + (V{vy_register}) {vy_contents:02X}",
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "ADD Vx, Vy",
+                f"(V{vx_register}) {vx_contents:02X} + (V{vy_register}) {vy_contents:02X}",
+                implemented=True,
+            )
 
     # 8XY5
     # SUB Vx, Vy
@@ -113,12 +117,13 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         self.v[vx_register].set(result)
 
-        self.log_opcode(
-            opcode,
-            "SUB Vx, Vy",
-            f"(V{vx_register}) {vx_contents:02X} - (V{vy_register}) {vy_contents:02X}",
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "SUB Vx, Vy",
+                f"(V{vx_register}) {vx_contents:02X} - (V{vy_register}) {vy_contents:02X}",
+                implemented=True,
+            )
 
     # 8XY7
     # SUBN Vx, Vy
@@ -140,12 +145,13 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         self.v[vx_register].set(result)
 
-        self.log_opcode(
-            opcode,
-            "SUBN Vx, Vy",
-            f"",  # TODO: Logging
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "SUBN Vx, Vy",
+                f"",  # TODO: Logging
+                implemented=True,
+            )
 
     # 8XYE
     # SHL Vx {, Vy}
@@ -167,12 +173,13 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         self.v[vx_register].set(vx_mult_2)
 
-        self.log_opcode(
-            opcode,
-            "SHL {Vx, Vy}",
-            f"",  # TODO: Logging
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "SHL {Vx, Vy}",
+                f"",  # TODO: Logging
+                implemented=True,
+            )
 
     # 8XY6
     # SHR Vx {, Vy}
@@ -194,12 +201,13 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         self.v[vx_register].set(vx_div_2)
 
-        self.log_opcode(
-            opcode,
-            "SHR Vx {, Vy}",
-            f"V{vx_register} LSB is {vx_lsb}; V{vx_register} set to {vx_div_2}",
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "SHR Vx {, Vy}",
+                f"V{vx_register} LSB is {vx_lsb}; V{vx_register} set to {vx_div_2}",
+                implemented=True,
+            )
 
     # FX1E
     # ADD I, Vx
@@ -209,9 +217,10 @@ def alu_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
 
         self.index_register.set(self.index_register.contents + vx_contents)
 
-        self.log_opcode(
-            opcode,
-            "ADD I, Vx",
-            f"",  # TODO: Logging
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "ADD I, Vx",
+                f"",  # TODO: Logging
+                implemented=True,
+            )

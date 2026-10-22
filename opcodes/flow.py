@@ -13,12 +13,13 @@ def flow_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         self.program_counter.set(subroutine_address)
         self.program_counter.dec(2)  # Will be incremented in same cycle by caller
 
-        self.log_opcode(
-            opcode,
-            "CALL NNN",
-            f"Added 1 to stack pointer, jumped from {_old_stack_counter:04X} to {self.program_counter.get():04X}",
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "CALL NNN",
+                f"Added 1 to stack pointer, jumped from {_old_stack_counter:04X} to {self.program_counter.get():04X}",
+                implemented=True,
+            )
         return 1
 
     # 00EE
@@ -30,12 +31,13 @@ def flow_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         self.program_counter.set(self.stack.pop())
         self.program_counter.dec(2)  # Will be incremented in same cycle by caller
 
-        self.log_opcode(
-            opcode,
-            "RET",
-            f"Subtracted 1 from stack pointer, jumped from {_old_stack_counter:04X} to {self.program_counter.get():04X}",
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "RET",
+                f"Subtracted 1 from stack pointer, jumped from {_old_stack_counter:04X} to {self.program_counter.get():04X}",
+                implemented=True,
+            )
         return 1
 
     # 1NNN
@@ -46,9 +48,10 @@ def flow_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         self.program_counter.set(address)
         self.program_counter.dec(2)  # Will be incremented in same cycle by caller
 
-        self.log_opcode(
-            opcode, "JP NNN", f"Set program counter to {address:04X}", implemented=True
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode, "JP NNN", f"Set program counter to {address:04X}", implemented=True
+            )
         return 1
 
     # BNNN
@@ -59,10 +62,11 @@ def flow_opcodes(self, opcode, opcode_hi_byte, opcode_lo_byte):
         v0 = self.v[0].contents
         jump_destination = (opcode_destination + v0) & 0xFFFF
         self.program_counter.set(jump_destination)
-        self.log_opcode(
-            opcode,
-            "JP V0, NNN",
-            f"Jumped to {self.program_counter.contents:04X} ({opcode_destination:04X} + {v0:04X})",
-            implemented=True,
-        )
+        if self.logging_enabled:
+            self.log_opcode(
+                opcode,
+                "JP V0, NNN",
+                f"Jumped to {self.program_counter.contents:04X} ({opcode_destination:04X} + {v0:04X})",
+                implemented=True,
+            )
         return 1
